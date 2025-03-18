@@ -19,3 +19,7 @@
 如何配置mongoDB数据库,请查阅,https://blog.csdn.net/weixin_43405300/article/details/120017878
 
 启动前后端项目命令都分别在前后端的package.json中
+
+# 构筑应用
+
+npm run prebuild && electron-builder --win --config
