@@ -16,4 +16,6 @@
 
 其次,配置mongoDB数据库,新建一个qq_users数据库,在该数据库下创建user表和userHistory表
 
+如何配置mongoDB数据库,请查阅,https://blog.csdn.net/weixin_43405300/article/details/120017878
+
 启动前后端项目命令都分别在前后端的package.json中
