@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebRTC Peer-to-Peer Test</title>
+</head>
+<body>
+<h1>WebRTC Peer-to-Peer Test</h1>
+<video id="localVideo" autoplay playsinline></video>
+<video id="remoteVideo" autoplay playsinline></video>
+
+<script>
+  // 创建两个RTCPeerConnection对象
+  const localPeerConnection = new RTCPeerConnection();
+  const remotePeerConnection = new RTCPeerConnection();
+
+  // 获取本地媒体流
+  async function startLocalStream() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      const localVideo = document.getElementById('localVideo');
+      localVideo.srcObject = stream;
+
+      // 将本地流添加到本地PeerConnection
+      stream.getTracks().forEach(track => localPeerConnection.addTrack(track, stream));
+    } catch (error) {
+      console.error('Error accessing media devices.', error);
+    }
+  }
+
+  // 处理远程流的到来
+  remotePeerConnection.ontrack = event => {
+    const remoteVideo = document.getElementById('remoteVideo');
+    remoteVideo.srcObject = event.streams[0];
+  };
+
+  // 交换ICE候选
+  localPeerConnection.onicecandidate = event => {
+    if (event.candidate) {
+      remotePeerConnection.addIceCandidate(event.candidate);
+    }
+  };
+
+  remotePeerConnection.onicecandidate = event => {
+    if (event.candidate) {
+      localPeerConnection.addIceCandidate(event.candidate);
+    }
+  };
+
+  // 创建Offer和Answer
+  async function createOffer() {
+    const offer = await localPeerConnection.createOffer();
+    await localPeerConnection.setLocalDescription(offer);
+    await remotePeerConnection.setRemoteDescription(offer);
+
+    const answer = await remotePeerConnection.createAnswer();
+    await remotePeerConnection.setLocalDescription(answer);
+    await localPeerConnection.setRemoteDescription(answer);
+  }
+
+  // 启动本地视频流并创建Offer
+  startLocalStream().then(createOffer);
+</script>
+</body>
+</html>
