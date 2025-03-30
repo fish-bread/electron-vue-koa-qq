@@ -12,6 +12,8 @@
 
 无法进行视频通信
 
+无法收藏聊天记录
+
 # 如何使用
 
 首先分别为electron-vue和koa进行 npm install命令
