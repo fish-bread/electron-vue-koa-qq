@@ -1,4 +1,4 @@
-# electron-vue-qq 禁止商用
+# electron-vue-qq
 
 一个仿造qq样式的聊天软件
 
